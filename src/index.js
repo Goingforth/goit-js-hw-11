@@ -1,31 +1,54 @@
 import Notiflix from 'notiflix';
 import { messagePleaseEnter } from './js/message';
 
+import getImage from './js/getImage';
+
+let counterPage = 1;
+
 const refs = {
   form: document.querySelector('.search-form'),
+  nextPage: document.querySelector('.load-more'),
+  input: document.querySelector('input'),
+  buttonSubmit: document.querySelector("[type = 'submit']"),
 };
-const axios = require('axios');
-const BASE_URL = 'https://pixabay.com/api/';
+
+refs.nextPage.classList.add('visibility__OFF');
+//refs.nextPage.style.display = 'none';
 
 refs.form.addEventListener('submit', onFormSubmit);
+refs.nextPage.addEventListener('click', onLoadMore);
+refs.input.addEventListener('input', onPresetData);
+
+let searchQuery = null;
 
 function onFormSubmit(event) {
   event.preventDefault();
-  const formData = new FormData(refs.form); // создаём объект FormData, передаём в него элемент формы
-  // теперь можно извлечь данные
-  const searchQuery = formData.get('searchQuery').trim();
+  //   if (counterPage === 1) {
+  //     // refs.nextPage.style.display = 'visible';
+  refs.nextPage.classList.remove('visibility__OFF');
+  // }
+  // counterPage += 1;
+  const formData = new FormData(refs.form);
+  searchQuery = formData.get('searchQuery').trim();
   searchQuery === ''
     ? Notiflix.Notify.warning(messagePleaseEnter())
-    : console.log(searchQuery);
+    : getImage(searchQuery, counterPage);
+}
+
+function onLoadMore(event) {
+  counterPage += 1;
+  refs.buttonSubmit.setAttribute('disabled', 'disabled');
+  console.log(counterPage);
+  onFormSubmit(event);
+  //getImage(searchQuery, counterPage);
 }
 
 //     event.currentTarget.reset();
 
-// async function getUser() {
-//   try {
-//     const response = await axios.get('/user?ID=12345');
-//     console.log(response);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+function onPresetData(input) {
+  if (refs.input.value.trim() !== searchQuery) {
+    counterPage = 1;
+    refs.nextPage.classList.add('visibility__OFF');
+    refs.buttonSubmit.removeAttribute('disabled');
+  }
+}
