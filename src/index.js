@@ -1,35 +1,44 @@
 import Notiflix from 'notiflix';
-import { messagePleaseEnter } from './js/message';
+import { messagePleaseEnter, messageEndGallery } from './js/message';
 
 import getImage from './js/getImage';
+import scanTotalHits from './js/scanTotalHits';
 
+import {
+  butSubmitActiveOFF,
+  butSubmitActiveON,
+  butMoreVisibilOFF,
+  butMoreVisibilON,
+} from './js/activeAndVisible';
+
+const refsForm = document.querySelector('.search-form');
+const refsNextPage = document.querySelector('.load-more');
+const refsInput = document.querySelector('input');
+const refsButtonSubmit = document.querySelector("[type = 'submit']");
 let counterPage = 1;
+export { refsNextPage, refsButtonSubmit, counterPage };
 
-const refs = {
-  form: document.querySelector('.search-form'),
-  nextPage: document.querySelector('.load-more'),
-  input: document.querySelector('input'),
-  buttonSubmit: document.querySelector("[type = 'submit']"),
-};
+butMoreVisibilOFF();
 
-refs.nextPage.classList.add('visibility__OFF');
-
-refs.form.addEventListener('submit', onFormSubmit);
-refs.nextPage.addEventListener('click', onLoadMore);
-refs.input.addEventListener('input', onPresetData);
+refsForm.addEventListener('submit', onFormSubmit);
+refsNextPage.addEventListener('click', onLoadMore);
+refsInput.addEventListener('input', onPresetData);
 
 let searchQuery = null;
 
 function onFormSubmit(event) {
   event.preventDefault();
 
-  const formData = new FormData(refs.form);
+  const formData = new FormData(refsForm);
   searchQuery = formData.get('searchQuery').trim();
   searchQuery === ''
     ? Notiflix.Notify.warning(messagePleaseEnter())
     : getImage(searchQuery, counterPage)
-        .then(buttonActiveOFF())
-        .then(visibility__ON());
+        .then(butSubmitActiveOFF(), butMoreVisibilON())
+        .then(response => {
+          scanTotalHits(response);
+          // print(response);
+        });
 }
 
 function onLoadMore(event) {
@@ -41,26 +50,13 @@ function onLoadMore(event) {
 //     event.currentTarget.reset();
 
 function onPresetData(input) {
-  if (refs.input.value.trim() !== searchQuery) {
+  if (refsInput.value.trim() !== searchQuery) {
     counterPage = 1;
-    visibility__OFF();
-
-    buttonActiveON();
+    butMoreVisibilOFF();
+    butSubmitActiveON();
   }
 }
 
-function buttonActiveOFF() {
-  refs.buttonSubmit.setAttribute('disabled', 'disabled');
-}
-
-function buttonActiveON() {
-  refs.buttonSubmit.removeAttribute('disabled');
-}
-
-function visibility__OFF() {
-  refs.nextPage.classList.add('visibility__OFF');
-}
-
-function visibility__ON() {
-  refs.nextPage.classList.remove('visibility__OFF');
+function print(resp) {
+  console.log(resp);
 }
