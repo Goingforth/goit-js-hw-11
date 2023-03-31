@@ -10,8 +10,10 @@ export const butSubmitActiveON = () => {
 
 export const butMoreVisibilOFF = () => {
   refsNextPage.classList.add('visibility__OFF');
+  refsNextPage.classList.remove('load-more');
 };
 
 export const butMoreVisibilON = () => {
   refsNextPage.classList.remove('visibility__OFF');
+  refsNextPage.classList.add('load-more');
 };

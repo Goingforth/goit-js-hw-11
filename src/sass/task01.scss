@@ -1,3 +1,76 @@
 .visibility__OFF {
   display: none;
 }
+
+.search-form {
+  display: flex;
+  justify-content: center;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: blue;
+}
+
+.search-form input {
+  margin-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.load-more {
+  display: block;
+  margin: 10px auto;
+  padding: 5px 15px;
+}
+
+.galleryItems {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: -20px;
+  margin-top: 0;
+}
+
+.galleryItem {
+  flex-basis: calc(100% / 4 - 20px);
+
+  margin-right: 10px;
+  margin-left: 10x;
+  margin-bottom: 16px;
+}
+img {
+  display: block;
+
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  background-color: #f5f5dc;
+}
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photo-card {
+  border: 1px solid gray;
+  transition: 1s;
+}
+
+.photo-card:hover,
+.photo-card:focus {
+  transform: scale(1.2);
+}

@@ -15,6 +15,9 @@ const refsForm = document.querySelector('.search-form');
 const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("[type = 'submit']");
+
+//const sample = document.getElementById('sample');
+const gallery = document.querySelector('.gallery');
 let counterPage = 1;
 export { refsNextPage, refsButtonSubmit, counterPage };
 
@@ -23,6 +26,10 @@ butMoreVisibilOFF();
 refsForm.addEventListener('submit', onFormSubmit);
 refsNextPage.addEventListener('click', onLoadMore);
 refsInput.addEventListener('input', onPresetData);
+
+const newGallery = document.createElement('ul');
+newGallery.classList.add('galleryItems');
+//newGallery.classList.add('grid');
 
 let searchQuery = null;
 
@@ -36,14 +43,13 @@ function onFormSubmit(event) {
     : getImage(searchQuery, counterPage)
         .then(butSubmitActiveOFF(), butMoreVisibilON())
         .then(response => {
-          scanTotalHits(response);
-          // print(response);
+          scanTotalHits(response), markupGallery(response.hits);
         });
 }
 
 function onLoadMore(event) {
   counterPage += 1;
-  console.log(counterPage);
+  // console.log(counterPage);
   onFormSubmit(event);
 }
 
@@ -57,6 +63,34 @@ function onPresetData(input) {
   }
 }
 
-function print(resp) {
-  console.log(resp);
+// largeImageURL - ссылка на большое изображение.
+
+function markupGallery(resp) {
+  //!!!!!!!! здесь вставить функцию формирования LI !!!!!!!!!!
+  resp.forEach(function (resp) {
+    const newItem = document.createElement('li');
+    newItem.classList.add('galleryItem');
+
+    newItem.innerHTML = `<div class="photo-card">
+  <img src="${resp.webformatURL}" alt="resp.tags" loading="lazy"  />
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b> ${resp.likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b>${resp.views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b>${resp.comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b>${resp.downloads}
+    </p>
+  </div>
+</div>`;
+
+    newGallery.appendChild(newItem);
+  });
+
+  gallery.append(newGallery);
 }
