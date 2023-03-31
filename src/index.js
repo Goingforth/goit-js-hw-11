@@ -1,4 +1,8 @@
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+// Дополнительный импорт стилей
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import { messagePleaseEnter, messageEndGallery } from './js/message';
 
 import getImage from './js/getImage';
@@ -17,7 +21,11 @@ const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("[type = 'submit']");
 
 const gallery = document.querySelector('.gallery');
+
+let lightbox = new SimpleLightbox('.gallery a');
+
 let counterPage = 1;
+
 export { refsNextPage, refsButtonSubmit, counterPage };
 
 butMoreVisibilOFF();
@@ -72,7 +80,9 @@ function markupGallery(resp) {
     newItem.classList.add('galleryItem');
 
     newItem.innerHTML = `<div class="photo-card">
-  <img src="${resp.webformatURL}" alt="resp.tags" loading="lazy"  />
+<a  href="${resp.largeImageURL}">
+  <img src="${resp.webformatURL}" alt="${resp.tags}" loading="lazy"  />
+</a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b> ${resp.likes}
@@ -93,4 +103,11 @@ function markupGallery(resp) {
   });
 
   gallery.append(newGallery);
+
+  lightbox.refresh();
+  //showBigImage();
 }
+
+// function showBigImage() {
+//  let lightbox = new SimpleLightbox('.gallery a');
+// }
