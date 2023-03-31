@@ -3,6 +3,9 @@
 }
 
 .search-form {
+  position: sticky;
+  top: 0;
+
   display: flex;
   justify-content: center;
 
@@ -72,5 +75,6 @@ img {
 
 .photo-card:hover,
 .photo-card:focus {
+  cursor: pointer;
   transform: scale(1.2);
 }

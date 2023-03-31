@@ -16,7 +16,6 @@ const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("[type = 'submit']");
 
-//const sample = document.getElementById('sample');
 const gallery = document.querySelector('.gallery');
 let counterPage = 1;
 export { refsNextPage, refsButtonSubmit, counterPage };
@@ -29,7 +28,6 @@ refsInput.addEventListener('input', onPresetData);
 
 const newGallery = document.createElement('ul');
 newGallery.classList.add('galleryItems');
-//newGallery.classList.add('grid');
 
 let searchQuery = null;
 
@@ -49,7 +47,6 @@ function onFormSubmit(event) {
 
 function onLoadMore(event) {
   counterPage += 1;
-  // console.log(counterPage);
   onFormSubmit(event);
 }
 
@@ -60,6 +57,9 @@ function onPresetData(input) {
     counterPage = 1;
     butMoreVisibilOFF();
     butSubmitActiveON();
+    // reset innerHtml
+    gallery.innerHTML = '';
+    newGallery.innerHTML = '';
   }
 }
 
