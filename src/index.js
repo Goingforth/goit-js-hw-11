@@ -1,12 +1,11 @@
 import Notiflix from 'notiflix';
-import SimpleLightbox from 'simplelightbox';
-// Дополнительный импорт стилей
-import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { messagePleaseEnter, messageEndGallery } from './js/message';
 
 import getImage from './js/getImage';
 import scanTotalHits from './js/scanTotalHits';
+import markupGallery from './js/markupGallery';
+import { newGallery } from './js/markupGallery';
 
 import {
   butSubmitActiveOFF,
@@ -20,9 +19,7 @@ const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("[type = 'submit']");
 
-const gallery = document.querySelector('.gallery');
-
-let lightbox = new SimpleLightbox('.gallery a');
+export const gallery = document.querySelector('.gallery');
 
 let counterPage = 1;
 
@@ -34,10 +31,8 @@ refsForm.addEventListener('submit', onFormSubmit);
 refsNextPage.addEventListener('click', onLoadMore);
 refsInput.addEventListener('input', onPresetData);
 
-const newGallery = document.createElement('ul');
-newGallery.classList.add('galleryItems');
-
 let searchQuery = null;
+let oldSearchQuery = null;
 
 function onFormSubmit(event) {
   event.preventDefault();
@@ -47,7 +42,7 @@ function onFormSubmit(event) {
   searchQuery === ''
     ? Notiflix.Notify.warning(messagePleaseEnter())
     : getImage(searchQuery, counterPage)
-        .then(butSubmitActiveOFF(), butMoreVisibilON())
+        .then(butSubmitActiveOFF(), butMoreVisibilON(), onPresetHTML())
         .then(response => {
           scanTotalHits(response), markupGallery(response.hits);
         });
@@ -58,56 +53,29 @@ function onLoadMore(event) {
   onFormSubmit(event);
 }
 
-//     event.currentTarget.reset();
-
 function onPresetData(input) {
   if (refsInput.value.trim() !== searchQuery) {
     counterPage = 1;
     butMoreVisibilOFF();
     butSubmitActiveON();
-    // reset innerHtml
-    gallery.innerHTML = '';
-    newGallery.innerHTML = '';
+  }
+}
+function clearHTML() {
+  gallery.innerHTML = '';
+  newGallery.innerHTML = '';
+}
+
+function onPresetHTML() {
+  if (oldSearchQuery !== searchQuery || counterPage === 1) {
+    clearHTML(), (oldSearchQuery = searchQuery);
   }
 }
 
-// largeImageURL - ссылка на большое изображение.
+// const { height: cardHeight } = document
+//   .querySelector('.gallery')
+//   .firstElementChild.getBoundingClientRect();
 
-function markupGallery(resp) {
-  //!!!!!!!! здесь вставить функцию формирования LI !!!!!!!!!!
-  resp.forEach(function (resp) {
-    const newItem = document.createElement('li');
-    newItem.classList.add('galleryItem');
-
-    newItem.innerHTML = `<div class="photo-card">
-<a  href="${resp.largeImageURL}">
-  <img src="${resp.webformatURL}" alt="${resp.tags}" loading="lazy"  />
-</a>
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b> ${resp.likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b>${resp.views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b>${resp.comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b>${resp.downloads}
-    </p>
-  </div>
-</div>`;
-
-    newGallery.appendChild(newItem);
-  });
-
-  gallery.append(newGallery);
-
-  lightbox.refresh();
-  //showBigImage();
-}
-
-// function showBigImage() {
-//  let lightbox = new SimpleLightbox('.gallery a');
-// }
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: 'smooth',
+// });
