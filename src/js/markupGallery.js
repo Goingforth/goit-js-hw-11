@@ -37,4 +37,12 @@ export default function markupGallery(resp) {
   gallery.append(newGallery);
 
   lightbox.refresh();
+
+  const { height: cardHeight } =
+    gallery.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
