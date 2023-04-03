@@ -6,9 +6,6 @@ import { perPage } from './getImage';
 import { onPresetHTML } from '../index';
 
 export default function scanTotalHits(resp) {
-  console.log(`counterPage:${counterPage}`);
-  console.log(`resp.totalHits:${resp.totalHits}`);
-
   if (resp.hits.length === 0) {
     throw new Error(error);
   }
