@@ -1,6 +1,10 @@
 import Notiflix from 'notiflix';
 
-import { messagePleaseEnter, messageEndGallery } from './js/message';
+import {
+  messagePleaseEnter,
+  messageNullSearch,
+  messageEndGallery,
+} from './js/message';
 
 import getImage from './js/getImage';
 import scanTotalHits from './js/scanTotalHits';
@@ -17,7 +21,7 @@ import {
 const refsForm = document.querySelector('.search-form');
 const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
-const refsButtonSubmit = document.querySelector("[type = 'submit']");
+const refsButtonSubmit = document.querySelector("button[type = 'submit']");
 
 export const gallery = document.querySelector('.gallery');
 
@@ -42,9 +46,16 @@ function onFormSubmit(event) {
   searchQuery === ''
     ? Notiflix.Notify.warning(messagePleaseEnter())
     : getImage(searchQuery, counterPage)
-        .then(butSubmitActiveOFF(), butMoreVisibilON(), onPresetHTML())
         .then(response => {
-          scanTotalHits(response), markupGallery(response.hits);
+          scanTotalHits(response);
+          butSubmitActiveOFF();
+          return response;
+        })
+        .then(response => {
+          markupGallery(response.hits);
+        })
+        .catch(error => {
+          Notiflix.Notify.failure(messageNullSearch());
         });
 }
 
@@ -65,7 +76,7 @@ function clearHTML() {
   newGallery.innerHTML = '';
 }
 
-function onPresetHTML() {
+export function onPresetHTML() {
   if (oldSearchQuery !== searchQuery || counterPage === 1) {
     clearHTML(), (oldSearchQuery = searchQuery);
   }
