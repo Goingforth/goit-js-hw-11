@@ -26,9 +26,9 @@
   margin: 10px auto;
   padding: 5px 15px;
 }
+/////////////////////////////////////////////
 
-.galleryItems {
-  list-style: none;
+.gallery {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -39,13 +39,23 @@
   margin-top: 0;
 }
 
-.galleryItem {
+.photo-card {
   flex-basis: calc(100% / 4 - 20px);
 
   margin-right: 10px;
   margin-left: 10x;
   margin-bottom: 16px;
+
+  border: 1px solid gray;
+  transition: 1s;
 }
+
+.photo-card:hover,
+.photo-card:focus {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
 img {
   display: block;
 
@@ -67,15 +77,4 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.photo-card {
-  border: 1px solid gray;
-  transition: 1s;
-}
-
-.photo-card:hover,
-.photo-card:focus {
-  cursor: pointer;
-  transform: scale(1.05);
 }

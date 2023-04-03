@@ -13,6 +13,7 @@ export default function scanTotalHits(resp) {
     Notiflix.Notify.success(`Hooray! We found ${resp.totalHits} images.`);
     butMoreVisibilON();
     onPresetHTML();
+    window.scrollBy(0, 0);
   }
   if (resp.totalHits - counterPage * `${perPage}` <= 0) {
     butMoreVisibilOFF();

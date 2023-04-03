@@ -1,21 +1,18 @@
 import Notiflix from 'notiflix';
 
-import {
-  messagePleaseEnter,
-  messageNullSearch,
-  messageEndGallery,
-} from './js/message';
+import { messagePleaseEnter, messageNullSearch } from './js/message';
 
 import getImage from './js/getImage';
 import scanTotalHits from './js/scanTotalHits';
-import markupGallery from './js/markupGallery';
-import { newGallery } from './js/markupGallery';
+
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+let lightbox = new SimpleLightbox('.gallery a');
 
 import {
   butSubmitActiveOFF,
   butSubmitActiveON,
   butMoreVisibilOFF,
-  butMoreVisibilON,
 } from './js/activeAndVisible';
 
 const refsForm = document.querySelector('.search-form');
@@ -23,7 +20,7 @@ const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("button[type = 'submit']");
 
-export const gallery = document.querySelector('.gallery');
+const gallery = document.querySelector('.gallery');
 
 let counterPage = 1;
 
@@ -71,13 +68,56 @@ function onPresetData(input) {
     butSubmitActiveON();
   }
 }
+
 function clearHTML() {
   gallery.innerHTML = '';
-  newGallery.innerHTML = '';
+  galleryString = '';
 }
 
 export function onPresetHTML() {
   if (oldSearchQuery !== searchQuery || counterPage === 1) {
     clearHTML(), (oldSearchQuery = searchQuery);
   }
+}
+
+/////////////////////////////////////////////////////////////////
+
+let galleryString = '';
+
+function markupGallery(resp) {
+  resp.forEach(function (resp) {
+    galleryString =
+      galleryString +
+      `<div class="photo-card">
+<a  href="${resp.largeImageURL}">
+  <img src="${resp.webformatURL}" alt="${resp.tags}" loading="lazy"  />
+</a>
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b> ${resp.likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b>${resp.views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b>${resp.comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b>${resp.downloads}
+    </p>
+  </div>
+</div>`;
+  });
+
+  gallery.innerHTML = galleryString;
+
+  lightbox.refresh();
+
+  const { height: cardHeight } =
+    gallery.firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
