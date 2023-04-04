@@ -22,6 +22,9 @@
 }
 
 .load-more {
+  position: relative;
+  top: 10px;
+
   display: block;
   margin: 10px auto;
   padding: 5px 15px;
@@ -29,6 +32,8 @@
 /////////////////////////////////////////////
 
 .gallery {
+  position: relative;
+  top: 10px;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
