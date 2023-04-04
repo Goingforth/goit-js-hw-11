@@ -15,12 +15,14 @@ import {
   butMoreVisibilOFF,
 } from './js/activeAndVisible';
 
+import scrollGallery from './js/scrollGallery';
+
 const refsForm = document.querySelector('.search-form');
 const refsNextPage = document.querySelector('.load-more');
 const refsInput = document.querySelector('input');
 const refsButtonSubmit = document.querySelector("button[type = 'submit']");
 
-const gallery = document.querySelector('.gallery');
+export const gallery = document.querySelector('.gallery');
 
 let counterPage = 1;
 
@@ -113,11 +115,5 @@ function markupGallery(resp) {
 
   lightbox.refresh();
 
-  //   const { height: cardHeight } =
-  //     gallery.firstElementChild.getBoundingClientRect();
-
-  //   window.scrollBy({
-  //     top: cardHeight * 2,
-  //     behavior: 'smooth',
-  //   });
+  scrollGallery(counterPage);
 }
